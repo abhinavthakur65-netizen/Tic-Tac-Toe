@@ -1,0 +1,160 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #ede9fe);
+    color: #1e293b;
+    text-align: center;
+    margin: 0;
+    padding: 25px 15px;
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    margin: 15px auto;
+    padding: 25px;
+    background-color: white;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px #00000020;
+}
+
+.header {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+h1 {
+    margin: 0 0 10px;
+}
+
+.header p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.scoreboard {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.score {
+    flex: 1;
+    background-color: #f1f5f9;
+    padding: 12px 5px;
+    border-radius: 10px;
+}
+
+.score strong {
+    display: block;
+    font-size: 24px;
+    margin-top: 8px;
+}
+
+.x-color {
+    color: #2563eb;
+}
+
+.o-color {
+    color: #7c3aed;
+}
+
+#turn {
+    font-size: 20px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.board {
+    width: 100%;
+    max-width: 330px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.cell {
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    font-size: clamp(28px, 10vw, 46px);
+    font-weight: bold;
+    background-color: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.cell:hover:not(:disabled) {
+    background-color: #ede9fe;
+    border-color: #7c3aed;
+}
+
+.cell:disabled {
+    opacity: 1;
+    cursor: default;
+}
+
+.cell.winner {
+    background-color: #dcfce7;
+    border-color: #16a34a;
+    color: #166534;
+}
+
+button:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 3px;
+}
+
+#message {
+    font-size: 20px;
+    font-weight: bold;
+    min-height: 28px;
+    margin: 20px 0;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.control {
+    flex: 1;
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#nextButton {
+    background-color: #2563eb;
+}
+
+#nextButton:hover {
+    background-color: #1d4ed8;
+}
+
+#resetButton {
+    background-color: #64748b;
+}
+
+#resetButton:hover {
+    background-color: #475569;
+}
+
+.note {
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 0;
+}

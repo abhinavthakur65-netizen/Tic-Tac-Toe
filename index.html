@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tic-Tac-Toe Game</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Tic-Tac-Toe</h1>
+        <p>Two players. Three in a row. One winner!</p>
+    </div>
+
+    <div class="scoreboard" aria-label="Scoreboard">
+        <div class="score x-color">
+            Player X
+            <strong id="xScore">0</strong>
+        </div>
+
+        <div class="score">
+            Draws
+            <strong id="drawScore">0</strong>
+        </div>
+
+        <div class="score o-color">
+            Player O
+            <strong id="oScore">0</strong>
+        </div>
+    </div>
+
+    <div id="turn" class="x-color" role="status">
+        Player X's Turn
+    </div>
+
+    <div class="board" role="group" aria-label="Game board">
+        <button type="button" class="cell"
+                aria-label="Cell 1, empty" onclick="makeMove(0)"></button>
+        <button type="button" class="cell"
+                aria-label="Cell 2, empty" onclick="makeMove(1)"></button>
+        <button type="button" class="cell"
+                aria-label="Cell 3, empty" onclick="makeMove(2)"></button>
+
+        <button type="button" class="cell"
+                aria-label="Cell 4, empty" onclick="makeMove(3)"></button>
+        <button type="button" class="cell"
+                aria-label="Cell 5, empty" onclick="makeMove(4)"></button>
+        <button type="button" class="cell"
+                aria-label="Cell 6, empty" onclick="makeMove(5)"></button>
+
+        <button type="button" class="cell"
+                aria-label="Cell 7, empty" onclick="makeMove(6)"></button>
+        <button type="button" class="cell"
+                aria-label="Cell 8, empty" onclick="makeMove(7)"></button>
+        <button type="button" class="cell"
+                aria-label="Cell 9, empty" onclick="makeMove(8)"></button>
+    </div>
+
+    <div id="message" role="status"></div>
+
+    <div class="buttons">
+        <button type="button" class="control" id="nextButton"
+                onclick="resetGame()">
+            New Round
+        </button>
+
+        <button type="button" class="control" id="resetButton"
+                onclick="resetScores()">
+            Reset All
+        </button>
+    </div>
+
+    <p class="note">
+        X starts each round. New Round clears the board.
+        Reset All clears the board and scores.
+        Scores last until the page is refreshed.
+    </p>
+
+</div>
+
+<script>
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let currentPlayer = "X";
+    let gameOver = false;
+
+    let xWins = 0;
+    let oWins = 0;
+    let draws = 0;
+
+    let cells = document.getElementsByClassName("cell");
+    let turn = document.getElementById("turn");
+    let message = document.getElementById("message");
+
+    let winningPatterns = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    function makeMove(position)
+    {
+        if (gameOver || board[position] !== "")
+            return;
+
+        board[position] = currentPlayer;
+
+        cells[position].textContent = currentPlayer;
+        cells[position].disabled = true;
+
+        cells[position].setAttribute(
+            "aria-label",
+            "Cell " + (position + 1) + ", " + currentPlayer
+        );
+
+        if (currentPlayer === "X")
+            cells[position].classList.add("x-color");
+        else
+            cells[position].classList.add("o-color");
+
+        if (checkWinner())
+        {
+            message.textContent = "Player " + currentPlayer + " Wins!";
+            message.style.color = "#166534";
+
+            if (currentPlayer === "X")
+                xWins++;
+            else
+                oWins++;
+
+            finishGame();
+            return;
+        }
+
+        if (board.indexOf("") === -1)
+        {
+            message.textContent = "It's a Draw!";
+            message.style.color = "#475569";
+            draws++;
+
+            finishGame();
+            return;
+        }
+
+        if (currentPlayer === "X")
+            currentPlayer = "O";
+        else
+            currentPlayer = "X";
+
+        turn.textContent = "Player " + currentPlayer + "'s Turn";
+
+        if (currentPlayer === "X")
+            turn.className = "x-color";
+        else
+            turn.className = "o-color";
+    }
+
+    function checkWinner()
+    {
+        for (let i = 0; i < winningPatterns.length; i++)
+        {
+            let a = winningPatterns[i][0];
+            let b = winningPatterns[i][1];
+            let c = winningPatterns[i][2];
+
+            if (board[a] !== "" &&
+                board[a] === board[b] &&
+                board[b] === board[c])
+            {
+                cells[a].classList.add("winner");
+                cells[b].classList.add("winner");
+                cells[c].classList.add("winner");
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function finishGame()
+    {
+        gameOver = true;
+        turn.textContent = "Round Finished";
+        turn.className = "";
+
+        for (let i = 0; i < cells.length; i++)
+        {
+            cells[i].disabled = true;
+        }
+
+        updateScores();
+    }
+
+    function updateScores()
+    {
+        document.getElementById("xScore").textContent = xWins;
+        document.getElementById("oScore").textContent = oWins;
+        document.getElementById("drawScore").textContent = draws;
+    }
+
+    function resetGame()
+    {
+        board = ["", "", "", "", "", "", "", "", ""];
+        currentPlayer = "X";
+        gameOver = false;
+
+        for (let i = 0; i < cells.length; i++)
+        {
+            cells[i].textContent = "";
+            cells[i].className = "cell";
+            cells[i].disabled = false;
+
+            cells[i].setAttribute(
+                "aria-label",
+                "Cell " + (i + 1) + ", empty"
+            );
+        }
+
+        message.textContent = "";
+        turn.textContent = "Player X's Turn";
+        turn.className = "x-color";
+    }
+
+    function resetScores()
+    {
+        xWins = 0;
+        oWins = 0;
+        draws = 0;
+
+        updateScores();
+        resetGame();
+    }
+</script>
+
+</body>
+</html>
